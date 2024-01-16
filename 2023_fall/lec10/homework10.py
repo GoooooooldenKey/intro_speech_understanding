@@ -16,7 +16,14 @@ def waveform_to_frames(waveform, frame_length, step):
     For every n and t such that 0 <= t*step+n <= N-1, it should be the case that 
        frames[n,t] = waveform[t*step+n]
     '''
-    raise RuntimeError("You need to change this part")
+    num_frames = int(np.ceil((len(waveform) - frame_length) / step)) + 1
+    frames = np.zeros((frame_length, num_frames))
+    for t in range(num_frames):
+        start = t * step
+        end = start + frame_length
+        frames[:, t] = waveform[start:end] if end <= len(waveform) else np.pad(waveform[start:], (0, frame_length - len(waveform[start:])))
+
+    return frames
 
 def frames_to_stft(frames):
     '''
@@ -28,7 +35,12 @@ def frames_to_stft(frames):
     @returns:
     stft (np.ndarray((frame_length,num_frames))) - the STFT (complex-valued)
     '''
-    raise RuntimeError("You need to change this part")
+    stft = np.empty_like(frames, dtype=np.complex64)
+
+    for i in range(frames.shape[1]):
+        stft[:, i] = np.fft.fft(frames[:, i])
+
+    return stft
 
 def stft_to_spectrogram(stft):
     '''
@@ -46,6 +58,11 @@ def stft_to_spectrogram(stft):
     np.amax(spectrogram) should be 0dB.
     np.amin(spectrogram) should be no smaller than -60dB.
     '''
-    raise RuntimeError("You need to change this part")
+    magnitude = np.abs(stft)
+    spectrogram = 20 * np.log10(magnitude)
+    spectrogram -= np.amax(spectrogram)
+    spectrogram = np.maximum(spectrogram, -60)
+
+    return spectrogram
 
 
