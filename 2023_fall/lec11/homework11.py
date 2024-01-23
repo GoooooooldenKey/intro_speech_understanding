@@ -13,4 +13,10 @@ def transcribe_wavefile(filename, language='en'):
     @returns:
     text (str) - the recognized speech
     '''
-    raise RuntimeError("FAIL!!  You need to change this function so it works!")
+    recognizer = speech_recognition.Recognizer()
+
+    with speech_recognition.AudioFile(filename) as source:
+        audio_data = recognizer.record(source)
+        text = recognizer.recognize_google(audio_data, language=language)
+    
+    return text
