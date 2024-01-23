@@ -128,3 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 *~
+2023_fall/lec11/webdata.wav
+2023_fall/lec12/desktop.ini
